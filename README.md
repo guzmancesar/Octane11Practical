@@ -59,11 +59,11 @@ HOW TO RUN THE EXCHANGE RATE TOOL
 
 The tool accepts the following arguments to run
 
-● start - the start date , defaulttoday.
-● end - the end date , default today.
-● base - the base currency, default USD.
-● symbol - the list of currency symbols to convert to (spaces eparated), required.   
-● output - the file name to write the output to, optional.
+start - the start date , defaulttoday.
+end - the end date , default today.
+base - the base currency, default USD.
+symbol - the list of currency symbols to convert to (spaces eparated), required.   
+output - the file name to write the output to, optional.
 
 
 EXAMPLE BELOW:
@@ -71,8 +71,11 @@ EXAMPLE BELOW:
 >$./exrates history --start 2021-02-01 --end 2021-02-02 --base USD --symbol EUR CAD
 
 {"date":"2021-02-01", "base":"USD", "symbol":"CAD", "rate":1.2805362463} 
+
 {"date":"2021-02-01", "base":"USD", "symbol":"EUR", "rate":0.8275405495} 
+
 {"date":"2021-02-02", "base":"USD", "symbol":"CAD", "rate":1.2804716041} 
+
 {"date":"2021-02-02", "base":"USD", "symbol":"EUR", "rate":0.8302889406}
 
 
