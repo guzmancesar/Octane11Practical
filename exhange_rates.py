@@ -145,9 +145,8 @@ def get_hist_api_content(options):
 		returned_data = json.loads(response.content.decode("utf-8"))
 		resultList.append(returned_data)
 	
-	remoldResults(resultList)
 	
-	return resultList
+	return(remoldResults(resultList))
 
 	#elif (options.end != None):
 		#response = requests.get('{0}{1}..{2}'.format(host, options.start, datePlusTwenty))
@@ -155,7 +154,8 @@ def get_hist_api_content(options):
 def get_conv_api_content(options):
 	currentdate = date.today()
 	currentdate = currentdate.strftime("%Y-%m-%d")
-	
+
+
 	if not(type(options.symbol) is list):
 		options.symbol = list(options.symbol)
 
@@ -163,6 +163,9 @@ def get_conv_api_content(options):
 
 	response = requests.get('{0}{1}?from={2}&to={3}'.format(host, options.date, options.base, options.symbol[0]))
 	returned_data = json.loads(response.content.decode("utf-8"))
+
+	conversion_rate = list(returned_data["rates"].values())[0]
+	print(options.amount * conversion_rate)
 
 
 	return returned_data
