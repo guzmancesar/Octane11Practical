@@ -42,9 +42,9 @@ https://programwithus.com/learn/python/install-python3-mac
 you can install the below python modules by running:
 "pip install <module name>" for each module below or simply running "pip install -r requirements.txt"
 
-argparse
-datetime 
-requests
-pandas
+argparse'\n'
+datetime'\n'
+requests'\n'
+pandas'\n'
 
 ************************************
