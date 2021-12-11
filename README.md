@@ -55,11 +55,20 @@ pandas
 
 
 
+
+
+
+
+Run the program with "./exrates .." followed by the appropriate arguments. 
+See below for more information and examples
+
+**************************************
+
 HOW TO RUN THE EXCHANGE RATE TOOL
 
-The tool accepts the following arguments to run
+The tool accepts the following arguments to run for the 'history' command 
 
-start - the start date , defaulttoday.
+start - the start date , default today.
 
 end - the end date , default today.
 
@@ -83,3 +92,29 @@ EXAMPLE BELOW:
 {"date":"2021-02-02", "base":"USD", "symbol":"EUR", "rate":0.8302889406}
 
 
+>$./exrates history --start 2021-02-01 --end 2021-02-02 --base USD --symbol EUR CAD --output output.txt
+
+*saves the ouput to the provided filename instead of printing to the standard output*
+
+***************************************
+
+The tool accepts the following arguments to run for the 'convert' command 
+
+
+
+date-the currency exchange date, default today.
+
+base - the base currency, default USD.
+
+symbol- the currency symbol to convert to, required. 
+
+amount-theamounttoconvert, required.
+
+amount - the amount to convert, required
+
+
+EXAMPLE BELOW:
+
+>$./exrates convert --date 2021-02-01 --base USD --symbol EUR --amount 50
+
+41.377027475
