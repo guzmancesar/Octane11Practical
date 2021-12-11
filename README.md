@@ -60,9 +60,13 @@ HOW TO RUN THE EXCHANGE RATE TOOL
 The tool accepts the following arguments to run
 
 start - the start date , defaulttoday.
+
 end - the end date , default today.
+
 base - the base currency, default USD.
+
 symbol - the list of currency symbols to convert to (spaces eparated), required.   
+
 output - the file name to write the output to, optional.
 
 
