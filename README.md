@@ -90,6 +90,9 @@ pandas
 
 
 
+run 'chmod u+r+x exrates' in the directory you have the files stored. If you cloned the
+repository with "git clone <link>" it will be in that repository.
+
 
 Run the program with "./exrates .." followed by the appropriate arguments. 
 See below for more information and examples

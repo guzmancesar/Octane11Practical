@@ -1,3 +1,0 @@
-#!/bin/sh
-
-python exchange_rates.py $*
