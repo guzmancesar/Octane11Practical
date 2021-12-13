@@ -17,20 +17,21 @@ def validate_dates(date_text):
         return False
     return True
 
-def remoldResults(resultList):
+def remoldResults(resultset):
 
 	finalResults = []
 
-	for resultset in resultList:
 		#for (date, symbol, rates) in zip (resultset['rates'], resultset['rates'].values().keys(), resultset['rates'].values().values()):
 			#print(date, symbol, rates)
 
-		if len(resultset) == 4:
-			rate_list  = {"date":resultset['date'], "base":resultset['base'], "symbol":str(list(resultset['rates'].keys())[0]), "rate":str(list(resultset['rates'].values())[0])}
+	for key, entry in zip(resultset['rates'].keys(), resultset['rates'].values()):
+		if len(resultset) == 4:		
+			rate_list  = {"date":resultset['date'], "base":resultset['base'], "symbol":key, "rate":entry}
 			finalResults.append(rate_list)
+		#else:
 		else:
-			for (date,data) in zip(resultset['rates'].values(), resultset['rates']):
-				rate_list = {"date":str(data), "base":str(resultset['base']), "symbol":str(list(date.keys())[0]), "rate":str(list(date.values())[0])}
+			for currency, rate in zip(entry.keys(), entry.values()): 	
+				rate_list = {"date":key, "base":resultset['base'], "symbol":currency, "rate":rate}
 				finalResults.append(rate_list)
 
 	final_results_sorted = sorted(finalResults, key = lambda i: (i['date'], i['symbol']))
@@ -134,20 +135,24 @@ def validate_history_args(options, host):
 
 
 def get_hist_api_content(options, host):
-	resultList = []
+	resultList = {}
+        
+
 
 	if options.start > options.end:
 		print('Error: Unable to use start date as it takes place after provided end date. Reassiging start date to be equivalent to end date')
 		options.start = options.end
-	for symbols in options.symbol:
-		if options.start == options.end:
-			response = requests.get('{0}{1}?from={2}&to={3}'.format(host, options.start, options.base, symbols))
-		else:
-			response = requests.get('{0}{1}..{2}?from={3}&to={4}'.format(host, options.start, options.end, options.base, symbols))
+	if options.start == options.end:
+		response = requests.get('{0}{1}?from={2}&to={3}'.format(host, options.start, options.base, options.symbol))
 		returned_data = json.loads(response.content.decode("utf-8"))
-		resultList.append(returned_data)
+		resultList = returned_data
+	else:
+		response = requests.get('{0}{1}..{2}?from={3}&to={4}'.format(host, options.start, options.end, options.base, options.symbol))
+		returned_data = json.loads(response.content.decode("utf-8"))
+		resultList = returned_data
+
 	
-	#print(resultList)
+	print(resultList)
 
 	return(remoldResults(resultList))
 
@@ -178,6 +183,11 @@ def main():
 
 	if options.command == 'history':
 		validate_history_args(options, apiHost)
+	
+		symbolString = "," 
+		symbolList =  (symbolString).join(options.symbol)
+		options.symbol = symbolList
+	
 		results = get_hist_api_content(options, apiHost)
 		if options.output != None:
 			
