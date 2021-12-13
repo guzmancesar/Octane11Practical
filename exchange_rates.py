@@ -155,8 +155,6 @@ def get_hist_api_content(options, host):
 		#response = requests.get('{0}{1}..{2}'.format(host, options.start, datePlusTwenty))
 
 def get_conv_api_content(options, host):
-	currentdate = date.today()
-	currentdate = currentdate.strftime("%Y-%m-%d")
 
 
 	if not(type(options.symbol) is list):
