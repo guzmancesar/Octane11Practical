@@ -61,10 +61,9 @@ def parse_options(args):
 
 
 
-def validate_convert_args(options):
+def validate_convert_args(options, host):
 	
 	#convert options.symbol to list 
-	host = 'https://api.frankfurter.app/'
 	endpoint = 'currencies'
 	response = requests.get('{0}{1}'.format(host, endpoint))
 	currency_codes = list(json.loads(response.content.decode("utf-8")).keys())
@@ -99,7 +98,7 @@ def validate_convert_args(options):
 
 
 
-def validate_history_args(options):
+def validate_history_args(options, host):
 	
 	#convert options.symbol to list 
 
@@ -107,7 +106,6 @@ def validate_history_args(options):
 		options.symbol = list(options.symbol)
 
 
-	host = 'https://api.frankfurter.app/'
 	endpoint = 'currencies'
 	response = requests.get('{0}{1}'.format(host, endpoint))
 	currency_codes = list(json.loads(response.content.decode("utf-8")).keys())
@@ -135,23 +133,19 @@ def validate_history_args(options):
 
 
 
-def get_hist_api_content(options):
+def get_hist_api_content(options, host):
 	resultList = []
-	host = 'https://api.frankfurter.app/'
 
 	if options.start > options.end:
 		print('Error: Unable to use start date as it takes place after provided end date. Reassiging start date to be equivalent to end date')
 		options.start = options.end
-	elif options.start == options.end:
-		for symbols in options.symbol:
+	for symbols in options.symbol:
+		elif options.start == options.end:
 			response = requests.get('{0}{1}?from={2}&to={3}'.format(host, options.start, options.base, symbols))
-			returned_data = json.loads(response.content.decode("utf-8"))
-			resultList.append(returned_data)
-	else:
-		for symbols in options.symbol:
+		else:
 			response = requests.get('{0}{1}..{2}?from={3}&to={4}'.format(host, options.start, options.end, options.base, symbols))
-			returned_data = json.loads(response.content.decode("utf-8"))
-			resultList.append(returned_data)
+		returned_data = json.loads(response.content.decode("utf-8"))
+		resultList.append(returned_data)
 	
 	#print(resultList)
 
@@ -160,7 +154,7 @@ def get_hist_api_content(options):
 	#elif (options.end != None):
 		#response = requests.get('{0}{1}..{2}'.format(host, options.start, datePlusTwenty))
 
-def get_conv_api_content(options):
+def get_conv_api_content(options, host):
 	currentdate = date.today()
 	currentdate = currentdate.strftime("%Y-%m-%d")
 
@@ -168,7 +162,6 @@ def get_conv_api_content(options):
 	if not(type(options.symbol) is list):
 		options.symbol = list(options.symbol)
 
-	host = 'https://api.frankfurter.app/'
 
 	response = requests.get('{0}{1}?from={2}&to={3}'.format(host, options.date, options.base, options.symbol[0]))
 	returned_data = json.loads(response.content.decode("utf-8"))
@@ -183,10 +176,11 @@ def get_conv_api_content(options):
 
 def main():
 	options = parse_options(sys.argv[1:])
+	apiHost =  'https://api.frankfurter.app/'
 
 	if options.command == 'history':
-		validate_history_args(options)
-		results = get_hist_api_content(options)
+		validate_history_args(options, apiHost)
+		results = get_hist_api_content(options, apiHost)
 		if options.output != None:
 			
 			fileToWrite = open(options.output, "w")
@@ -203,8 +197,8 @@ def main():
 				print(record)
 
 	elif options.command == 'convert':
-		validate_convert_args(options)
-		results = get_conv_api_content(options)
+		validate_convert_args(options, apihost)
+		results = get_conv_api_content(options, apiHost)
 		print(results)
 	else:
 		print("Error: invalid command. Acceptable command values are ['history', 'convert'])")
