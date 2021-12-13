@@ -6,7 +6,6 @@ import datetime
 from datetime import date
 import datetime
 import requests
-import pandas
 import json
 
 
