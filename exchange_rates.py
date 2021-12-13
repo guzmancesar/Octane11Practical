@@ -140,7 +140,7 @@ def get_hist_api_content(options, host):
 		print('Error: Unable to use start date as it takes place after provided end date. Reassiging start date to be equivalent to end date')
 		options.start = options.end
 	for symbols in options.symbol:
-		elif options.start == options.end:
+		if options.start == options.end:
 			response = requests.get('{0}{1}?from={2}&to={3}'.format(host, options.start, options.base, symbols))
 		else:
 			response = requests.get('{0}{1}..{2}?from={3}&to={4}'.format(host, options.start, options.end, options.base, symbols))
