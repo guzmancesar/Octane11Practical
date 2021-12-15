@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import unittest
 import argparse
 import sys
 import datetime 
@@ -7,6 +8,7 @@ from datetime import date
 import datetime
 import requests
 import json
+
 
 
 
@@ -18,6 +20,7 @@ def validate_dates(date_text):
     return True
 
 def remoldResults(resultset):
+
 
 	finalResults = []
 
@@ -35,6 +38,11 @@ def remoldResults(resultset):
 				finalResults.append(rate_list)
 
 	final_results_sorted = sorted(finalResults, key = lambda i: (i['date'], i['symbol']))
+	
+	assert isinstance(final_results_sorted, list), "Error: 101 The results processed by this code are not in the correct format. Please contact technical support"
+	assert len(final_results_sorted) > 0, "Error: 102 The results processed by this code are not in the correct format. Please contact technical support"
+
+
 	return final_results_sorted
 
 
@@ -56,14 +64,20 @@ def parse_options(args):
 	convert_parser.add_argument('--base', default = 'USD', nargs='?')
 	convert_parser.add_argument('--symbol', nargs='*', required = True)
 	convert_parser.add_argument('--amount', type=int, required = True)
+	
+	assert isinstance(parser.parse_args(args), argparse.Namespace), 'Error: 103 The results processed by this code are not in the correct format. Please contact technical support'
 
-	#print(parser.parse_args(args))
 	return parser.parse_args(args)
 
 
 
+
 def validate_convert_args(options, host):
-	
+
+	assert isinstance(options, argparse.Namespace), 'Error: 104 The results processed by this code are not in the correct format. Please contact technical support'
+
+
+
 	#convert options.symbol to list 
 	endpoint = 'currencies'
 	response = requests.get('{0}{1}'.format(host, endpoint))
@@ -90,7 +104,12 @@ def validate_convert_args(options, host):
 		if code not in currency_codes:
 			print("Error: " + code + " is an invalid Convert Currency. Please reference https://taxsummaries.pwc.com/glossary/currency-codes for a list of valid currency codes")	
 			quit()
+
+	if options.amount < 1:
+		print("Error: Invalid Amount. Please enter an ammount greater than 1")
+		quit()
 	
+
 	#if not isinstance(options.amount, int):
 	#	print("Error: {0} is not a valid argument for the --amount flag. Please provide integers for this argument".format(options.amount))
 	#	quit()
@@ -102,6 +121,10 @@ def validate_convert_args(options, host):
 def validate_history_args(options, host):
 	
 	#convert options.symbol to list 
+
+	assert isinstance(options, argparse.Namespace), 'Error: 105 The results processed by this code are not in the correct format. Please contact technical support'
+
+
 
 	if not(type(options.symbol) is list):
 		options.symbol = list(options.symbol)
@@ -120,7 +143,6 @@ def validate_history_args(options, host):
 		print('Error: '  + options.base + 'is an invalid Currency. Please see the below for a list of valid currency codes')
 		quit()
 
-	#use the api for these two if statements 
 	for code in options.symbol:
 		if code not in currency_codes:
 			print('Error: ' + code + 'is an invalid Currency. Please see the below for a list of valid currency codes')	
@@ -139,6 +161,7 @@ def get_hist_api_content(options, host):
         
 
 
+
 	if options.start > options.end:
 		print('Error: Unable to use start date as it takes place after provided end date. Reassiging start date to be equivalent to end date')
 		options.start = options.end
@@ -152,9 +175,14 @@ def get_hist_api_content(options, host):
 		resultList = returned_data
 
 	
-	print(resultList)
+	#print(resultList)
+	api_results = remoldResults(resultList)
 
-	return(remoldResults(resultList))
+	assert isinstance(api_results, list), "Error: 106 The results processed by this code are not in the correct format. Please contact technical support"
+	assert len(api_results) > 0, "Error: 107 The results processed by this code are not in the correct format. Please contact technical support"
+
+
+	return(api_results)
 
 	#elif (options.end != None):
 		#response = requests.get('{0}{1}..{2}'.format(host, options.start, datePlusTwenty))
@@ -170,9 +198,12 @@ def get_conv_api_content(options, host):
 	returned_data = json.loads(response.content.decode("utf-8"))
 
 	conversion_rate = list(returned_data["rates"].values())[0]
+	converted_amount = (options.amount * conversion_rate)
+	
 
 
-	return (options.amount * conversion_rate)
+	assert isinstance(converted_amount, float), "Error: 108 The results processed by this code are not in the correct format. Please contact technical support"
+	return converted_amount
 
 
  
@@ -205,7 +236,7 @@ def main():
 				print(record)
 
 	elif options.command == 'convert':
-		validate_convert_args(options, apihost)
+		validate_convert_args(options, apiHost)
 		results = get_conv_api_content(options, apiHost)
 		print(results)
 	else:

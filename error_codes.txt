@@ -1,0 +1,9 @@
+#error codes
+#101 Error in remoldResults, final_results_sorted is not a list
+#102 Error in remoldResults, final_results_sorted len is empty
+#103 Error in parse_options, parsed arguments is not in a namespace object
+#104 Error in validate_convert_args, parsed args(options) are not in a argparse.namespace object
+#105 Error in validate_history_args, parsed args(options) are not in a argparse.namespace object
+#106 Error in get_hist_api_content, api results are not in list format 
+#107 Error in get_hist_api_contemt, api results list is empty
+#108 Error in get_conv_api_content, converted currency is not a float
